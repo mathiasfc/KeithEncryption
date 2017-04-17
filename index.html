@@ -1,7 +1,355 @@
-<!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+<header>
+<style>
+ul{
+border:1px solid grey;
+display:inline-block;
+width:80px;
+margin:5px;
+}
+
+li{
+list-style-type:none;
+border-top: 1px solid grey;
+text-align:center;
+width:122px;
+margin-left:-41px;
+}
+
+.control{
+margin-top:20px;
+margin-bottom:20px;
+}
+
+.error{
+color:red;
+}
+
+.success{
+color:green;
+}
+
+.info{
+color:blue;
+}
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="dbjson/data.json"></script>
+<h1>Keith Number Hashmap</h1>
+</header>
+<body onload="isKeithNumber(196);">
+
+<span>Verifique se é um número Keith:</span>
+<input id="inputKeith" type="number"></input>
+<button id="btnVerKeith">Verificar</button>
+<span id="spnIsKeith"></span><br><br>
+<span>Quantidade de conteúdo por nodo:</span>&nbsp;&nbsp;<span id="spanNodeData" style="color:green; font-weight:bold;"></span>
+<hr>
+<div class="control">
+<span style="">Chave:</span>
+<input id="inputKey" type="number"></input>
+<span style="margin-left:10px;">Conteúdo:</span>
+<input id="inputData"></input>
+<button id="btnAddData">Adicionar</button>
+<button id="btnRemoveData" disabled="true">Remover</button>
+<!-- <button id="btnUpdateData">Atualizar</button> -->
+<span id="msgDataAdd" style="margin-left:10px;"></span>
+</div>
+<div class="control">
+<span>Chave/Conteúdo:</span>
+<input id="inputSearch" ></input>
+<button id="btnSearchData" disabled="true">Procurar</button>
+<button id="btnClearSearch" disabled="true">Limpar</button>
+<span id="msgSearch" style="margin-left:10px;"></span>
+</div>
+<div class="control">
+<span>Armazenamento local:</span>
+<button id="btnClearStorage" style="margin-left:13px;">Limpar</button>
+<span id="msgStorage" style="margin-left:10px;"></span>
+</div>
+<div class="control">
+<span>Simular dados aleatórios:</span>
+<input id="inputRandom" placeholder="número de chaves" type="number"></input>
+<button id="btnSimulateData" disabled="true" >Simular</button>
+<span id="msgSimulate" style="margin-left:10px;"></span>
+</div>
+<hr>
+
+<div id="database">
+
+</div>
 </body>
-</html>
+
+<script>
+
+var dbJson;
+var nodeContent = 5;
+
+$(document).ready(function(){
+	
+	buildDataBase();
+	//alert(localStorage.getItem('dbjson'));
+});
+
+
+$("input").keypress( function() {
+  $("span[id*='msg']").text("");
+});
+
+
+$("#btnVerKeith").click(function(){
+	$("#spnIsKeith").removeClass();
+	if(isKeithNumber($("#inputKeith").val())){
+		$("#spnIsKeith").addClass("success");
+		$("#spnIsKeith").text("É um número Keith.")
+	}else{
+		$("#spnIsKeith").addClass("error");
+		$("#spnIsKeith").text("Não é um número Keith.")
+	}
+});
+
+$("#btnAddData").click(function(){
+    var msgErro = "";
+	if(!$("#inputKey").val()){
+		msgErro = "Erro, informe uma chave;";
+	}
+	if(!$("#inputData").val()){
+		if(msgErro.length > 0){
+			msgErro += " informe o conteúdo.";
+		}else{
+			msgErro = "Erro, informe o conteúdo";
+		}
+	}
+	if(msgErro){
+		$("#msgDataAdd").addClass("error");
+		$("#msgDataAdd").text(msgErro);
+		return false;
+	}
+	if(isKeithNumber($("#inputKey").val())){
+		 AddDataToJson($("#inputKey").val(),$("#inputData").val());
+	}else{
+		$("#msgDataAdd").addClass("error");
+		$("#msgDataAdd").text("A chave deve ser um número Keith.");
+	}
+	
+});
+
+$("#btnSearchData").click(function(){
+	if(!$("#inputSearch").val()){
+		$("#msgSearch").addClass("error");
+		$("#msgSearch").text("Erro, campo vazio.");
+		return false;
+	}
+	$("#msgSearch").text("");
+	FindDataInJson($("#inputSearch").val());
+});
+
+$("#btnClearSearch").click(function(){
+	$("#inputSearch").val("");
+	$("#msgSearch").text("");
+	buildDataBase();
+});
+
+$("#btnClearStorage").click(function(){
+	localStorage.clear();
+	$("#msgStorage").addClass("success");
+	$("#msgStorage").text("Os dados em memória foram apagados.");
+	buildDataBase();
+});
+
+$("#btnUpdateData").click(function(){
+
+});
+
+$("#btnSimulateData").click(function(){
+	if($("#inputRandom").val()){
+	var quant = parseInt($("#inputRandom").val());
+	//var keysKeith = GenerateKeithNumbersLogical(quant);
+	var keysKeith = GenerateKeithNumbersManual(quant);
+	
+		//for(var i =0;i<quant;i++){
+		//	
+		//}
+	
+	}else{
+		$("#msgSimulate").addClass("error");
+		$("#msgSimulate").text("Informe o número de chaves a serem geradas.");
+	}
+});
+
+
+function buildDataBase(){
+    $("#spanNodeData").text(nodeContent);
+	$("#database").html("");
+	if(!localStorage.getItem('dbjson')){
+		dbJson = JSON.parse(data);
+	}else{
+		dbJson = "";
+		dbJson = JSON.parse(localStorage.getItem('dbjson'));
+	}
+	for(var key in dbJson[0])
+	{
+			var appendHtml = "";
+			appendHtml = "<ul id='"+ key +"'>"+key+"";
+			dbJson[0][key].forEach(function(item) {
+				appendHtml +="<li>"+ item +"</li>";
+			});
+			appendHtml +="</ul>";
+			
+			$("#database").append(appendHtml);
+			//console.log(key);
+	}
+	
+}
+
+function GenerateKeithNumbers(quant){
+	var numeros_keith = new Array();
+	var keiths = GenerateOneKeith(0);
+	var cont = 0;
+	while(numeros_keith.length < quant)
+	{
+		var aux = keiths.next().value;
+		numeros_keith.push(aux);
+		console.log(aux + ' - ' + cont);
+		cont++;
+	}	
+	
+	keiths.return();
+	return numeros_keith;
+}
+
+function * GenerateOneKeith(i)
+{
+	while(true){
+		if(isKeithNumber(i)){ yield i; }
+		i++;
+	}
+}
+
+function FindDataInJson(data){
+	//for(var key in dbJson[0])
+	//{
+	//	if(data != key){
+	//		
+	//	}
+	//		var appendHtml = "";
+	//		appendHtml = "<ul id='"+ key +"'>"+key+"";
+	//		dbJson[0][key].forEach(function(item) {
+	//			appendHtml +="<li>"+ item +"</li>";
+	//		});
+	//		appendHtml +="</ul>";
+	//		
+	//		$("#database").append(appendHtml);
+	//		//console.log(key);
+	//}
+}
+
+function AddDataToJson(keyToAdd,data){
+	if(checkIfKeyExist(keyToAdd)){
+		//Se a chave já estiver cheia
+			if(dbJson[0][keyToAdd].length < nodeContent){
+				dbJson[0][keyToAdd].push(data);
+				RefreshJsonAndPage();
+				//console.log('retrievedObject: ', JSON.parse(retrievedObject));
+				//buildDataBase();
+				return false;
+			//Tenta alocar em outra chave	
+			}else{
+				var possibleKeys = getKeithBuild(keyToAdd);
+				for(var i =0; i<possibleKeys.length;i++){
+					if(checkIfKeyExist(possibleKeys[i])){
+						if(dbJson[0][possibleKeys[i]].length < nodeContent){
+							dbJson[0][possibleKeys[i]].push(data);
+						RefreshJsonAndPage();
+						return false;
+						}
+					}else if(!checkIfKeyExist(possibleKeys[i])){
+						dbJson[0][possibleKeys[i]] = [data];
+						RefreshJsonAndPage();
+						return false;
+					}
+				}
+				$("#msgDataAdd").addClass("error");
+				$("#msgDataAdd").text("Todas as sub-chaves já estão com capacidade máxima.");
+			}
+	}else{
+		dbJson[0][keyToAdd] = [data];
+		RefreshJsonAndPage();
+	}
+	
+	//for(var key in dbJson[0]){
+	//	if(key == keyToAdd){
+	//		
+	//		
+	//	}
+	//}
+	
+	
+}
+
+function RefreshJsonAndPage(){
+	var jsonToAdd = JSON.stringify(dbJson);
+	localStorage.setItem('dbjson', jsonToAdd);
+	buildDataBase(); 
+}
+
+function checkIfKeyExist(keyToAdd){
+	for(var key in dbJson[0]){
+		if(key == keyToAdd){
+			return true;
+		}
+	}
+	return false;
+}
+
+function isKeithNumber(number){
+	var inputs = [];
+	if(number){
+		var numberTest = number;
+		var numberLenght = number.toString().length;
+		var result = 0;
+		if(numberLenght > 1){
+			for (i = 0; i < numberLenght; i++) { 
+				inputs.push(parseInt(numberTest.toString()[i]));
+			}		
+			do {
+			    result = inputs.reduce(soma,0);
+				inputs.shift();
+				inputs.push(result);
+			}
+			while (result != numberTest && result < numberTest);
+		}
+		if(result == numberTest) return true;
+			return false;
+	}
+}
+
+function getKeithBuild(number){
+	var arr = [];
+	var inputs = [];
+	if(isKeithNumber(number)){
+		for (i = 0; i < number.toString().length; i++) { 
+					inputs.push(parseInt(number.toString()[i]));
+			}		
+			do {
+			    result = inputs.reduce(soma,0);
+				// console.log(result);
+				inputs.shift();
+				inputs.push(result);
+				if(result != number)
+				arr.push(result);
+			}
+			while (result != number && result < number);
+		//return arr[Math.floor(Math.random()* arr.length)];
+		return arr;
+	}
+}
+
+function soma(a, b) {
+    return a + b;
+}
+
+//até 11 digitos
+var keithNumbers = [14,19,28,47,61,75,197,742,1104,1537,2208,3684,4788,7385,7647,7909,31331,34285,34348,55604,62662,86935,93993,120284,129106,147640,156146,174680,183186,298320,355419,694280,925993,1084051,7913837,11436171,33445755,44121607,129572008,251133297,24769286411,96189170155];
+</script>	
