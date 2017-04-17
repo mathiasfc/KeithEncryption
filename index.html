@@ -1,4 +1,4 @@
-<head>
+ï»¿<head>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
 </head>
 <header>
@@ -44,16 +44,16 @@ color:blue;
 </header>
 <body onload="isKeithNumber(196);">
 
-<span>Verifique se é um número Keith:</span>
+<span>Verifique se Ã© um nÃºmero Keith:</span>
 <input id="inputKeith" type="number"></input>
 <button id="btnVerKeith">Verificar</button>
 <span id="spnIsKeith"></span><br><br>
-<span>Quantidade de conteúdo por nodo:</span>&nbsp;&nbsp;<span id="spanNodeData" style="color:green; font-weight:bold;"></span>
+<span>Quantidade de conteÃºdo por nodo:</span>&nbsp;&nbsp;<span id="spanNodeData" style="color:green; font-weight:bold;"></span>
 <hr>
 <div class="control">
 <span style="">Chave:</span>
 <input id="inputKey" type="number"></input>
-<span style="margin-left:10px;">Conteúdo:</span>
+<span style="margin-left:10px;">ConteÃºdo:</span>
 <input id="inputData"></input>
 <button id="btnAddData">Adicionar</button>
 <button id="btnRemoveData" disabled="true">Remover</button>
@@ -61,7 +61,7 @@ color:blue;
 <span id="msgDataAdd" style="margin-left:10px;"></span>
 </div>
 <div class="control">
-<span>Chave/Conteúdo:</span>
+<span>Chave/ConteÃºdo:</span>
 <input id="inputSearch" ></input>
 <button id="btnSearchData" disabled="true">Procurar</button>
 <button id="btnClearSearch" disabled="true">Limpar</button>
@@ -73,8 +73,8 @@ color:blue;
 <span id="msgStorage" style="margin-left:10px;"></span>
 </div>
 <div class="control">
-<span>Simular dados aleatórios:</span>
-<input id="inputRandom" placeholder="número de chaves" type="number"></input>
+<span>Simular dados aleatÃ³rios:</span>
+<input id="inputRandom" placeholder="nÃºmero de chaves" type="number"></input>
 <button id="btnSimulateData" disabled="true" >Simular</button>
 <span id="msgSimulate" style="margin-left:10px;"></span>
 </div>
@@ -106,10 +106,10 @@ $("#btnVerKeith").click(function(){
 	$("#spnIsKeith").removeClass();
 	if(isKeithNumber($("#inputKeith").val())){
 		$("#spnIsKeith").addClass("success");
-		$("#spnIsKeith").text("É um número Keith.")
+		$("#spnIsKeith").text("Ã‰ um nÃºmero Keith.")
 	}else{
 		$("#spnIsKeith").addClass("error");
-		$("#spnIsKeith").text("Não é um número Keith.")
+		$("#spnIsKeith").text("NÃ£o Ã© um nÃºmero Keith.")
 	}
 });
 
@@ -120,9 +120,9 @@ $("#btnAddData").click(function(){
 	}
 	if(!$("#inputData").val()){
 		if(msgErro.length > 0){
-			msgErro += " informe o conteúdo.";
+			msgErro += " informe o conteÃºdo.";
 		}else{
-			msgErro = "Erro, informe o conteúdo";
+			msgErro = "Erro, informe o conteÃºdo";
 		}
 	}
 	if(msgErro){
@@ -134,7 +134,7 @@ $("#btnAddData").click(function(){
 		 AddDataToJson($("#inputKey").val(),$("#inputData").val());
 	}else{
 		$("#msgDataAdd").addClass("error");
-		$("#msgDataAdd").text("A chave deve ser um número Keith.");
+		$("#msgDataAdd").text("A chave deve ser um nÃºmero Keith.");
 	}
 	
 });
@@ -158,7 +158,7 @@ $("#btnClearSearch").click(function(){
 $("#btnClearStorage").click(function(){
 	localStorage.clear();
 	$("#msgStorage").addClass("success");
-	$("#msgStorage").text("Os dados em memória foram apagados.");
+	$("#msgStorage").text("Os dados em memÃ³ria foram apagados.");
 	buildDataBase();
 });
 
@@ -178,7 +178,7 @@ $("#btnSimulateData").click(function(){
 	
 	}else{
 		$("#msgSimulate").addClass("error");
-		$("#msgSimulate").text("Informe o número de chaves a serem geradas.");
+		$("#msgSimulate").text("Informe o nÃºmero de chaves a serem geradas.");
 	}
 });
 
@@ -251,7 +251,7 @@ function FindDataInJson(data){
 
 function AddDataToJson(keyToAdd,data){
 	if(checkIfKeyExist(keyToAdd)){
-		//Se a chave já estiver cheia
+		//Se a chave jÃ¡ estiver cheia
 			if(dbJson[0][keyToAdd].length < nodeContent){
 				dbJson[0][keyToAdd].push(data);
 				RefreshJsonAndPage();
@@ -275,7 +275,7 @@ function AddDataToJson(keyToAdd,data){
 					}
 				}
 				$("#msgDataAdd").addClass("error");
-				$("#msgDataAdd").text("Todas as sub-chaves já estão com capacidade máxima.");
+				$("#msgDataAdd").text("Todas as sub-chaves jÃ¡ estÃ£o com capacidade mÃ¡xima.");
 			}
 	}else{
 		dbJson[0][keyToAdd] = [data];
