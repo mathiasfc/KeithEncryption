@@ -44,38 +44,38 @@ color:blue;
 </header>
 <body onload="isKeithNumber(196);">
 
-<span>Verifique se é um número Keith: </span>
+<span>Check if it's keith number: </span>
 <input id="inputKeith" type="number"></input>
-<button id="btnVerKeith">Verificar</button>
+<button id="btnVerKeith">Check</button>
 <span id="spnIsKeith"></span><br><br>
-<span>Quantidade de conteúdo por nodo:</span>&nbsp;&nbsp;<span id="spanNodeData" style="color:green; font-weight:bold;"></span>
+<span>Node capacity:</span>&nbsp;&nbsp;<span id="spanNodeData" style="color:green; font-weight:bold;"></span>
 <hr>
 <div class="control">
-<span style="">Chave:</span>
+<span style="">Key:</span>
 <input id="inputKey" type="number"></input>
-<span style="margin-left:10px;">Conteúdo:</span>
+<span style="margin-left:10px;">Data:</span>
 <input id="inputData"></input>
-<button id="btnAddData">Adicionar</button>
-<button id="btnRemoveData" disabled="true">Remover</button>
+<button id="btnAddData">Add</button>
+<button id="btnRemoveData" disabled="true">Remove</button>
 <!-- <button id="btnUpdateData">Atualizar</button> -->
 <span id="msgDataAdd" style="margin-left:10px;"></span>
 </div>
 <div class="control">
-<span>Chave/Conteúdo:</span>
+<span>Key/Data:</span>
 <input id="inputSearch" ></input>
-<button id="btnSearchData" disabled="true">Procurar</button>
-<button id="btnClearSearch" disabled="true">Limpar</button>
+<button id="btnSearchData" disabled="true">Search</button>
+<button id="btnClearSearch" disabled="true">Clean</button>
 <span id="msgSearch" style="margin-left:10px;"></span>
 </div>
 <div class="control">
-<span>Armazenamento local:</span>
-<button id="btnClearStorage" style="margin-left:13px;">Limpar</button>
+<span>Local Storage:</span>
+<button id="btnClearStorage" style="margin-left:13px;">Clean</button>
 <span id="msgStorage" style="margin-left:10px;"></span>
 </div>
 <div class="control">
-<span>Simular dados aleatórios:</span>
+<span>Simulate random data:</span>
 <input id="inputRandom" placeholder="número de chaves" type="number"></input>
-<button id="btnSimulateData" disabled="true" >Simular</button>
+<button id="btnSimulateData" disabled="true" >Simulate</button>
 <span id="msgSimulate" style="margin-left:10px;"></span>
 </div>
 <hr>
@@ -106,23 +106,23 @@ $("#btnVerKeith").click(function(){
 	$("#spnIsKeith").removeClass();
 	if(isKeithNumber($("#inputKeith").val())){
 		$("#spnIsKeith").addClass("success");
-		$("#spnIsKeith").text("É um número Keith.")
+		$("#spnIsKeith").text("It's keith number.")
 	}else{
 		$("#spnIsKeith").addClass("error");
-		$("#spnIsKeith").text("Não é um número Keith.")
+		$("#spnIsKeith").text("It's not keith number.")
 	}
 });
 
 $("#btnAddData").click(function(){
     var msgErro = "";
 	if(!$("#inputKey").val()){
-		msgErro = "Erro, informe uma chave;";
+		msgErro = "Error, enter a key;";
 	}
 	if(!$("#inputData").val()){
 		if(msgErro.length > 0){
-			msgErro += " informe o conteúdo.";
+			msgErro += " enter a data.";
 		}else{
-			msgErro = "Erro, informe o conteúdo";
+			msgErro = "Error, enter a data";
 		}
 	}
 	if(msgErro){
@@ -134,7 +134,7 @@ $("#btnAddData").click(function(){
 		 AddDataToJson($("#inputKey").val(),$("#inputData").val());
 	}else{
 		$("#msgDataAdd").addClass("error");
-		$("#msgDataAdd").text("A chave deve ser um número Keith.");
+		$("#msgDataAdd").text("The key must be a keith number.");
 	}
 	
 });
@@ -142,7 +142,7 @@ $("#btnAddData").click(function(){
 $("#btnSearchData").click(function(){
 	if(!$("#inputSearch").val()){
 		$("#msgSearch").addClass("error");
-		$("#msgSearch").text("Erro, campo vazio.");
+		$("#msgSearch").text("Error, empty input.");
 		return false;
 	}
 	$("#msgSearch").text("");
@@ -158,7 +158,7 @@ $("#btnClearSearch").click(function(){
 $("#btnClearStorage").click(function(){
 	localStorage.clear();
 	$("#msgStorage").addClass("success");
-	$("#msgStorage").text("Os dados em memória foram apagados.");
+	$("#msgStorage").text("The data in memory has been erased.");
 	buildDataBase();
 });
 
@@ -178,7 +178,7 @@ $("#btnSimulateData").click(function(){
 	
 	}else{
 		$("#msgSimulate").addClass("error");
-		$("#msgSimulate").text("Informe o número de chaves a serem geradas.");
+		$("#msgSimulate").text("Enter the number of keys to be generated.");
 	}
 });
 
@@ -275,7 +275,7 @@ function AddDataToJson(keyToAdd,data){
 					}
 				}
 				$("#msgDataAdd").addClass("error");
-				$("#msgDataAdd").text("Todas as sub-chaves já estão com capacidade máxima.");
+				$("#msgDataAdd").text("All subkeys already have maximum capacity.");
 			}
 	}else{
 		dbJson[0][keyToAdd] = [data];
